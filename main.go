@@ -1,20 +1,27 @@
 package main
 
 import (
-    "fmt"
-    "sync"
+    "log"
+    "net/http"
 
+    "./application"
+    "./infrastructure"
+    "./interface/http"
 )
 
 func main() {
-    var wg sync.WaitGroup
-    wg.Add(10)
-    for i := 0; i < 10; i++ {
-        go func(n int) {
-            defer wg.Done()
-            fmt.Println("Goroutine", n)
-        }(i)
+    db, err := infrastructure.NewDB()
+    if err != nil {
+        log.Fatalf("failed to connect to db: %v", err)
     }
-    wg.Wait()
-    fmt.Println("All goroutines finished executing")
+    defer db.Close()
+
+    userRepo := infrastructure.NewUserRepo(db)
+    userService := application.NewUserService(userRepo)
+
+    router := http.NewRouter(userService)
+
+    if err := http.ListenAndServe(":8080", router); err != nil {
+        log.Fatalf("failed to start server: %v", err)
+    }
 }

@@ -6,7 +6,7 @@ import (
     "strconv"
 
     "github.com/go-chi/chi/v5"
-    "your-project-name/application"
+    "../application"
 )
 
 type userController struct {
