@@ -5,7 +5,7 @@ import (
 
     "github.com/go-chi/chi/v5"
     "github.com/go-chi/chi/v5/middleware"
-    "../application"
+    "example.com/m/v2/src/application"
 )
 
 func NewRouter(userService application.UserService) http.Handler {

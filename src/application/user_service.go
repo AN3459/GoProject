@@ -1,6 +1,6 @@
 package application
 
-import "../domain"
+import "example.com/m/v2/src/domain"
 
 type userService struct {
     userRepo domain.UserRepository

@@ -1,6 +1,6 @@
 package domain
 
-import "gorm.io/gorm"
+//import "gorm.io/gorm"
 
 type User struct {
     ID   int64  `gorm:"primaryKey"`

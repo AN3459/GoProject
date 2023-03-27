@@ -4,9 +4,9 @@ import (
     "log"
     "net/http"
 
-    "./application"
-    "./infrastructure"
-    "./interface/http"
+    "example.com/m/v2/src/application"
+    "example.com/m/v2/src/infrastructure"
+    "example.com/m/v2/src/interface/http"
 )
 
 func main() {

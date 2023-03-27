@@ -14,7 +14,7 @@ package infrastructure
 import (
     "gorm.io/driver/postgres"
     "gorm.io/gorm"
-    "../domain"
+    "example.com/m/v2/src/domain"
 )
 
 func initDB() *gorm.DB {
