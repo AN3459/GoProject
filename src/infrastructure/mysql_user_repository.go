@@ -2,7 +2,7 @@ package infrastructure
 
 import (
     "../domain"
-
+    "gorm.io/driver/postgres"
     "gorm.io/gorm"
 )
 
