@@ -1,27 +1,36 @@
 package main
 
 import (
-    "log"
-    "net/http"
-
-    "example.com/m/v2/src/application"
-    "example.com/m/v2/src/infrastructure"
-    "example.com/m/v2/src/interface/http"
+	"example.com/m/v2/src/controller"
+	"example.com/m/v2/src/entity"
+	"example.com/m/v2/src/repository"
+	"example.com/m/v2/src/service"
+	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func main() {
-    db, err := infrastructure.NewDB()
-    if err != nil {
-        log.Fatalf("failed to connect to db: %v", err)
-    }
-    defer db.Close()
+	dsn := "user:password@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
 
-    userRepo := infrastructure.NewUserRepo(db)
-    userService := application.NewUserService(userRepo)
+	err = db.AutoMigrate(&entity.User{})
+	if err != nil {
+		panic("failed to migrate database")
+	}
 
-    router := http.NewRouter(userService)
+	userRepo := repository.NewUserRepository(db)
+	userService := service.NewUserService(userRepo)
+	userController := controller.NewUserController(userService)
+	router := gin.Default()
 
-    if err := http.ListenAndServe(":8080", router); err != nil {
-        log.Fatalf("failed to start server: %v", err)
-    }
+	router.POST("/users", userController.AddUser)
+
+	err = router.Run(":8080")
+	if err != nil {
+		panic("failed to start server")
+	}
 }
